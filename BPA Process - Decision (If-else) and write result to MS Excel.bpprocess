@@ -1,0 +1,268 @@
+﻿<process name="Decision (If-else) and write result to MS Excel" version="1.0" bpversion="7.2.0.5997" narrative="An example workflow of using Blue Prism RPA to make decision (If-else) and write result to Microsoft Excel" byrefcollection="true" processrunningmessage="" disableversioning="false" preferredid="f207981c-9686-465b-a16e-845ab1b09b97">
+  <view>
+    <camerax>128</camerax>
+    <cameray>105</cameray>
+    <zoom version="2">1.5625</zoom>
+  </view>
+  <preconditions />
+  <endpoint narrative="" />
+  <stage stageid="79e69440-a15a-40f4-a5d9-c38dc8633948" name="Start" type="Start">
+    <display x="15" y="-135" />
+    <onsuccess>d6caaa0f-6ff2-47b9-adc9-4e55a9a77fd7</onsuccess>
+  </stage>
+  <stage stageid="c5d86399-d5fb-4f5f-8bde-c72652eb8a75" name="End" type="End">
+    <display x="225" y="345" />
+  </stage>
+  <stage stageid="866323cd-66a2-4e82-b578-4f5d1e1ac0fc" name="Stage1" type="ProcessInfo">
+    <display x="-180" y="-120" w="240" h="90" />
+  </stage>
+  <stage stageid="d6caaa0f-6ff2-47b9-adc9-4e55a9a77fd7" name="MS Excel VBO::Create Instance" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="-90" w="90" h="30" />
+    <inputs>
+      <input type="flag" name="Enable Events" friendlyname="Enable Events" narrative="Flag to indicate that events should be enabled / disabled on the attached instance - defaulted to True" expr="" />
+    </inputs>
+    <outputs>
+      <output type="number" name="handle" friendlyname="handle" narrative="An integer which can be used to identify the created instance in subsequent actions" stage="handle" />
+    </outputs>
+    <onsuccess>667ee1ff-d74d-41d5-bff9-bdad3ac7554e</onsuccess>
+    <resource object="MS Excel VBO" action="Create Instance" />
+  </stage>
+  <stage stageid="5d347ee7-b5e5-4c7a-a431-5775d1af0b62" name="handle" type="Data">
+    <display x="135" y="-90" w="120" h="30" />
+    <datatype>number</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="dc61b1ed-d428-45ec-8462-347cab20b033" name="MS Excel VBO::Get Worksheet As Collection" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="0" w="90" h="30" />
+    <inputs>
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook which contains the sheet required. The default empty text indicates the currently active workbook on the specified instance." expr="[Workbook Name]" />
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the worksheet which should be retrieved resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Worksheet Name" friendlyname="Worksheet Name" narrative="The name of the worksheet within the specified workbook which should be written to a collection. The default empty text indicates the currently active worksheet within the specified workbook." expr="[Worksheet Name]" />
+      <input type="text" name="Fetch Data With Method" friendlyname="Fetch Data With Method" narrative="Optional: The method used to fetch data from cells in the worksheet. Options include Text, Value, and Value2. The default indicates Value will be used." expr="" />
+      <input type="flag" name="First Row Is Header" friendlyname="First Row Is Header" narrative="Optional: Flag indicating that the first row of the worksheet is a header row. Default is False." expr="True" />
+    </inputs>
+    <outputs>
+      <output type="collection" name="Data" friendlyname="Data" narrative="The collection containing the data from the specified worksheet - the column IDs will be gleaned from the first row on the sheet being retrieved." stage="Data" />
+    </outputs>
+    <onsuccess>aebec244-f6ff-4e9b-961a-92dc053a93b2</onsuccess>
+    <resource object="MS Excel VBO" action="Get Worksheet As Collection" />
+  </stage>
+  <stage stageid="27e6366e-791f-4bc2-906d-c118f0401772" name="Grade" type="ChoiceStart">
+    <display x="15" y="90" />
+    <groupid>ca58b52e-aee5-4511-ae61-88ffb3b0e32e</groupid>
+    <choices>
+      <choice expression="[Data.Score]&gt;=80 AND [Data.Score] &lt;=100">
+        <name>Grade A</name>
+        <distance>60</distance>
+        <ontrue>3d5dfcf4-51de-46dd-b46f-d4912b39356a</ontrue>
+      </choice>
+      <choice expression="[Data.Score]&gt;=70 AND [Data.Score] &lt;=79">
+        <name>Grade B</name>
+        <distance>135</distance>
+        <ontrue>17b03b6d-6f66-4a8f-b4a1-f73e15344f1e</ontrue>
+      </choice>
+      <choice expression="[Data.Score]&gt;=60 AND [Data.Score] &lt;=69">
+        <name>Grade C</name>
+        <distance>210</distance>
+        <ontrue>db832f79-e0d3-402b-93ab-c9d76d0f7d5d</ontrue>
+      </choice>
+      <choice expression="[Data.Score]&gt;=50 AND [Data.Score] &lt;=59">
+        <name>Grade D</name>
+        <distance>285</distance>
+        <ontrue>98b076a0-ba9f-410f-9c32-85078b5b20d8</ontrue>
+      </choice>
+      <choice expression="[Data.Score]&lt;50">
+        <name>Grade F</name>
+        <distance>360</distance>
+        <ontrue>0b8f3f76-d406-4796-b304-05f8d0d7e857</ontrue>
+      </choice>
+    </choices>
+  </stage>
+  <stage stageid="35faef34-4d63-4690-9f3e-e9c82537f796" name="Otherwise" type="ChoiceEnd">
+    <display x="450" y="90" />
+    <onsuccess>64a69f61-0e22-4982-be1c-2af0f949284f</onsuccess>
+    <groupid>ca58b52e-aee5-4511-ae61-88ffb3b0e32e</groupid>
+  </stage>
+  <stage stageid="a1ba6ec8-8b42-4da8-bd0b-49bfb4e2e1c1" name="File Path" type="Data">
+    <loginhibit onsuccess="true" />
+    <display x="-135" y="-15" w="120" h="30" />
+    <datatype>text</datatype>
+    <initialvalue xml:space="preserve">C:\Users\Public\Documents\DecisionExample.xlsx</initialvalue>
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="fa57ece5-90ce-4584-b687-71dbfa85b051" name="Input Parameters" type="Block">
+    <loginhibit onsuccess="true" />
+    <display x="-210" y="-60" w="150" h="135" />
+    <font family="Segoe UI" size="10" style="Regular" color="99CCFF" />
+  </stage>
+  <stage stageid="7b916ec4-91f4-4044-88d8-18bf0b7b6a4c" name="Worksheet Name" type="Data">
+    <display x="-135" y="30" w="120" h="30" />
+    <datatype>text</datatype>
+    <initialvalue xml:space="preserve">Sheet1</initialvalue>
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="7921978b-0dfc-438f-910d-4694815aa71b" name="Workbook Name" type="Data">
+    <display x="135" y="-45" w="120" h="30" />
+    <datatype>text</datatype>
+    <initialvalue />
+    <private />
+    <alwaysinit />
+  </stage>
+  <stage stageid="667ee1ff-d74d-41d5-bff9-bdad3ac7554e" name="MS Excel VBO::Open Workbook" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="-45" w="90" h="30" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the required workbook should be opened. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="File name" friendlyname="File name" narrative="The path and name of the file which should be opened." expr="[File Path]" />
+      <input type="text" name="Password" friendlyname="Password" narrative="Optional. The password required to open the workbook. This only applies to workbooks that were saved with a password." expr="" />
+    </inputs>
+    <outputs>
+      <output type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name used by Excel to identify the workbook - usually this is the file name (without the path)." stage="Workbook Name" />
+    </outputs>
+    <onsuccess>dc61b1ed-d428-45ec-8462-347cab20b033</onsuccess>
+    <resource object="MS Excel VBO" action="Open Workbook" />
+  </stage>
+  <stage stageid="610a11a1-1045-4c51-bff2-66e8f3afadba" name="Data" type="Collection">
+    <display x="135" y="0" w="120" h="30" />
+    <datatype>collection</datatype>
+    <private />
+    <alwaysinit />
+    <collectioninfo>
+      <field name="Student ID" type="text" />
+      <field name="Name" type="text" />
+      <field name="Score" type="number" />
+      <field name="Grade" type="text" />
+    </collectioninfo>
+  </stage>
+  <stage stageid="aebec244-f6ff-4e9b-961a-92dc053a93b2" name="Loop Data" type="LoopStart">
+    <loginhibit onsuccess="true" />
+    <display x="15" y="45" />
+    <onsuccess>27e6366e-791f-4bc2-906d-c118f0401772</onsuccess>
+    <groupid>af595e5d-224c-42a8-a51c-1e1a1f561fa7</groupid>
+    <looptype>ForEach</looptype>
+    <loopdata>Data</loopdata>
+  </stage>
+  <stage stageid="40a50b77-2355-46f2-8e9a-2ff10b67f36e" name="Loop Data" type="LoopEnd">
+    <loginhibit onsuccess="true" />
+    <display x="225" y="210" />
+    <onsuccess>4564550b-e1e7-4351-9084-f475283b173c</onsuccess>
+    <groupid>af595e5d-224c-42a8-a51c-1e1a1f561fa7</groupid>
+  </stage>
+  <stage stageid="3d5dfcf4-51de-46dd-b46f-d4912b39356a" name="Put grade A into collection " type="Calculation">
+    <loginhibit onsuccess="true" />
+    <display x="75" y="135" />
+    <onsuccess>8be0bbc0-850c-416c-b0c5-511a77c6903c</onsuccess>
+    <calculation expression="&quot;A&quot;" stage="Data.Grade" />
+  </stage>
+  <stage stageid="4564550b-e1e7-4351-9084-f475283b173c" name="MS Excel VBO::Write Collection" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="225" y="255" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the specified collection should be written. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook within which the data should be written. The default empty value indicates the current workbook within the specified instance." expr="[Workbook Name]" />
+      <input type="collection" name="Collection" friendlyname="Collection" narrative="The collection containing the data which should be written to the worksheet." expr="[Data]" />
+      <input type="text" name="Worksheet Name" friendlyname="Worksheet Name" narrative="The name of the worksheet on which the given data should be written. The default empty value indicates the current sheet within the specified workbook." expr="&quot;Sheet1&quot;" />
+      <input type="text" name="Cell Reference" friendlyname="Cell Reference" narrative="The reference at which the collection should be written." expr="&quot;A1&quot;" />
+      <input type="flag" name="Include Column Names" friendlyname="Include Column Names" narrative="True to indicate that the column names from the collection should be written out as the first row; False to ignore the column names and just write out the data." expr="True" />
+    </inputs>
+    <onsuccess>be4b2c4c-6e2e-41e0-a9b5-94e1cb960911</onsuccess>
+    <resource object="MS Excel VBO" action="Write Collection" />
+  </stage>
+  <stage stageid="be4b2c4c-6e2e-41e0-a9b5-94e1cb960911" name="MS Excel VBO::Save Workbook" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="315" y="255" />
+    <inputs>
+      <input type="number" name="handle" friendlyname="handle" narrative="The integer handle identifying the instance on which the workbook which should be saved resides. The default of zero indicates the currently active instance." expr="[handle]" />
+      <input type="text" name="Workbook Name" friendlyname="Workbook Name" narrative="The name of the workbook which should be saved" expr="[Workbook Name]" />
+    </inputs>
+    <onsuccess>10b66ed8-5fe2-4314-bace-0922d1d93f44</onsuccess>
+    <resource object="MS Excel VBO" action="Save Workbook" />
+  </stage>
+  <stage stageid="10b66ed8-5fe2-4314-bace-0922d1d93f44" name="MS Excel VBO::Exit" type="Action">
+    <loginhibit onsuccess="true" />
+    <display x="315" y="300" />
+    <onsuccess>61503356-1525-4358-a631-20748485e90c</onsuccess>
+    <resource object="MS Excel VBO" action="Exit" />
+  </stage>
+  <stage stageid="17b03b6d-6f66-4a8f-b4a1-f73e15344f1e" name="Put grade B into collection " type="Calculation">
+    <loginhibit onsuccess="true" />
+    <display x="150" y="135" />
+    <onsuccess>f18f7801-83b3-4c9d-ab76-9a9ccc87ba99</onsuccess>
+    <calculation expression="&quot;B&quot;" stage="Data.Grade" />
+  </stage>
+  <stage stageid="db832f79-e0d3-402b-93ab-c9d76d0f7d5d" name="Put grade C into collection " type="Calculation">
+    <loginhibit onsuccess="true" />
+    <display x="225" y="135" />
+    <onsuccess>b5092af1-3a64-4857-a436-ad3322ad9048</onsuccess>
+    <calculation expression="&quot;C&quot;" stage="Data.Grade" />
+  </stage>
+  <stage stageid="98b076a0-ba9f-410f-9c32-85078b5b20d8" name="Put grade D into collection " type="Calculation">
+    <loginhibit onsuccess="true" />
+    <display x="300" y="135" />
+    <onsuccess>d75e7ac1-e989-4f64-836c-772c0c6dcec5</onsuccess>
+    <calculation expression="&quot;D&quot;" stage="Data.Grade" />
+  </stage>
+  <stage stageid="0b8f3f76-d406-4796-b304-05f8d0d7e857" name="Put grade F into collection " type="Calculation">
+    <loginhibit onsuccess="true" />
+    <display x="375" y="135" />
+    <onsuccess>aa953fd4-da71-490b-84bb-155ddf528f66</onsuccess>
+    <calculation expression="&quot;F&quot;" stage="Data.Grade" />
+  </stage>
+  <stage stageid="8be0bbc0-850c-416c-b0c5-511a77c6903c" name="Anchor1" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="75" y="180" w="10" h="10" />
+    <onsuccess>b5092af1-3a64-4857-a436-ad3322ad9048</onsuccess>
+  </stage>
+  <stage stageid="f18f7801-83b3-4c9d-ab76-9a9ccc87ba99" name="Anchor2" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="150" y="180" w="10" h="10" />
+    <onsuccess>b5092af1-3a64-4857-a436-ad3322ad9048</onsuccess>
+  </stage>
+  <stage stageid="b5092af1-3a64-4857-a436-ad3322ad9048" name="Anchor3" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="225" y="180" w="10" h="10" />
+    <onsuccess>40a50b77-2355-46f2-8e9a-2ff10b67f36e</onsuccess>
+  </stage>
+  <stage stageid="d75e7ac1-e989-4f64-836c-772c0c6dcec5" name="Anchor4" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="300" y="180" w="10" h="10" />
+    <onsuccess>b5092af1-3a64-4857-a436-ad3322ad9048</onsuccess>
+  </stage>
+  <stage stageid="aa953fd4-da71-490b-84bb-155ddf528f66" name="Anchor5" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="375" y="180" w="10" h="10" />
+    <onsuccess>b5092af1-3a64-4857-a436-ad3322ad9048</onsuccess>
+  </stage>
+  <stage stageid="e1c98811-4f3f-45d1-a41a-ef71376b8498" name="Anchor6" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="450" y="180" w="10" h="10" />
+    <onsuccess>b5092af1-3a64-4857-a436-ad3322ad9048</onsuccess>
+  </stage>
+  <stage stageid="64a69f61-0e22-4982-be1c-2af0f949284f" name="Invalid" type="Calculation">
+    <loginhibit onsuccess="true" />
+    <display x="450" y="135" />
+    <onsuccess>e1c98811-4f3f-45d1-a41a-ef71376b8498</onsuccess>
+    <calculation expression="&quot;Invalid number&quot;" stage="Data.Grade" />
+  </stage>
+  <stage stageid="61503356-1525-4358-a631-20748485e90c" name="Anchor7" type="Anchor">
+    <loginhibit onsuccess="true" />
+    <display x="225" y="300" w="10" h="10" />
+    <onsuccess>c5d86399-d5fb-4f5f-8bde-c72652eb8a75</onsuccess>
+  </stage>
+  <stage stageid="63fe3f3a-1aae-4b11-9c01-c8e3834cc3f6" name="Note1" type="Note">
+    <narrative>Write data collection into Microsoft Excel</narrative>
+    <display x="120" y="270" w="120" h="30" />
+    <font family="Segoe UI" size="10" style="Regular" color="0000FF" />
+  </stage>
+  <stage stageid="692a24da-d295-4b8b-a067-83277b6f78e4" name="Note1" type="Note">
+    <narrative>Read data from Microsoft Excel into data collection</narrative>
+    <display x="285" y="-45" w="120" h="30" />
+    <font family="Segoe UI" size="10" style="Regular" color="0000FF" />
+  </stage>
+</process>
